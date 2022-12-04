@@ -1,0 +1,19 @@
+
+body{
+    background-image: url();
+}
+#signup {
+    /* border: 2px solid red; */
+    padding-top: 50px;
+    padding-right: 50px;
+}
+
+#email {
+    padding-right: 29px;
+}
+
+#password {
+    padding-left: 5px;
+}
+
+
