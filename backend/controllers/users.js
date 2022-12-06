@@ -1,129 +1,139 @@
 const User = require('../models/User')
-
-// Require bcrypt 
+const Recipe = require('../models/Recipe')
+const jwt_decode = require('jwt-decode')
 const bcrypt = require('bcrypt');
 const salt = 10;
 
-// Require jsonwebtoken
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
-async function createUser(req,res) {
-    try {
+const createUser = async (req, res) => {
     
+    try{
         let hashedPassword = bcrypt.hashSync(req.body.password, salt)
-        console.log(hashedPassword);
 
         const newUser = await User.create({
             username: req.body.username,
             email: req.body.email,
             password: hashedPassword,
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            favorited_recipes: req.body.favorited_recipes
         })
-        res.json(newUser)
-    } catch (err) {
-        res.json(err)
+
+        return res.json(newUser);
+
+    }catch (err){
+        return res.json(err)
     }
 }
 
-const auth_sigin_post = async (req, res) =>{
-    let {username, password} = req.body;
-    console.log(username);
 
+
+const loginUser = async (req, res) => {
+    let {email, password} = req.body;
     try{
-        let user = await User.findOne({username}); 
-        console.log(user);
+        let user = await User.findOne({email});
+
+        console.log(user)
 
         if(!user){
-            return res.json({message: "User not Register"}).status(400);
+            return res.json({error: "User not found!"}).status(400);
         }
 
         const isMatch = await bcrypt.compareSync(password, user.password);
-        console.log(password); 
-        console.log(user.password); 
 
-        if(!isMatch) {
-            return res.json({message: "Invalid Password"}).status(401);
+        if(!isMatch){
+            return res.json({error: "Password not matched!"}).status(401);
         }
 
-        // JWT Token
         const payload = {
             user: {
-                username: user.username
-                // name: 'Test!!!'
-                // id: user._id,
+                id: user._id,
             }
         }
 
         jwt.sign(
             payload,
             process.env.SECRET,
-            { expiresIn: 36000000},
-            (err, token) => {
+            {expiresIn: 36000000},
+            (err ,token) => {
                 if(err) throw err;
-                res.json({token}).status(200);
+                //returns token as an object >>>>  {token : <token value>}
+                return res.json({token}).status(200)
             }
         )
-    } catch (error) {
-        console.log(error)
-        res.json({message: "You are not loggedin!. Try again later."}).status(400);
+
+    } catch (err){
+        return res.json({error: "You are not loggedin, please try again later!"}).status(400);
     }
-} 
-
-async function createUserCar(req,res) {
-
-    // Find the user that created the car post 
-    let user = await User.findById(req.params.userId)
-
-    //Create the car post
-    let newCar = await Car.create(req.body)
-
-    // Push the new car post ID into the user's 'posts' property
-    user.cars.push(newCar._id)
-
-    // Save our changes to the user
-    await user.save()
-
-    // Respond with the user data
-    // Populate the post data
-    await user.populate('cars')
-    res.json(user)
 }
 
-async function updateUser() {
+
+const getAllUsers = async (req, res) => {
+    
     try {
-    let updatedUser = await User.findByIdAndUpdate(
-        req.params._id,
-        req.body
-    )
-    res.json({message: 'User updated Successfully!'})
-    // res.json(updatedUser)
-    } catch (err) {
-        res.json(err)
+        const users = await User.find()
+
+        return res.json(users)
+
+    }catch (err){
+        return res.json(err);
     }
 }
 
-async function deleteUser(req, res) {
+
+const getUserById = async (req, res) => {
+    
     try {
-        await User.findByIdAndDelete(req.params._id)
-        res.json({message: 'User deleted successfully!'})
-    } catch (err) {
-        res.json(err)
+        const user = await User.findById(req.params.userId)
+        return res.json(user)
+    }catch (err){
+        return res.json(err);
     }
 }
 
-async function getAllUsers(req, res) {
+const updateUser = async (req, res) => {
+    
     try {
-        const allUsers = await User.find().populate('cars')
-        res.json(allUsers)
-    } catch (err) {
-        res.json(err)
+        const filter = {_id: req.params.userId};
+        const update = req.body;
+        const updatedUser = await User.findOneAndUpdate(filter, update);
+        res.json(updatedUser);
+    }catch (err){
+        res.json(err);
     }
 }
+
+
+
+const getUsersRecipes = async (req, res) => {
+
+
+    const user = jwt_decode(req.headers.authorization)
+    console.log(user)
+
+    const idOfUser = user.user.id
+
+    try {
+
+       const user = await User.findById(mongoose.Types.ObjectId(idOfUser)).populate('recipes')
+       
+       return res.json(user)
+
+    }catch (err){
+        return res.json(err);
+    }
+}
+
+
+
+
 
 module.exports = {
     createUser,
+    loginUser,
     getAllUsers,
-    createUserCar,
+    getUserById,
     updateUser,
-    deleteUser,
-    auth_sigin_post
+    getUsersRecipes
 }

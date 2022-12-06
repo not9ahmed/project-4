@@ -20,6 +20,8 @@ router.delete('/ingredient/:_id', recipesController.deleteIngredient)
 
 
 // Favorite Food
-router.post('/favorite-recipe/:_id', recipesController.favoriteRecipe)
+router.post('/favorite/add/:_id', recipesController.addFavorite)
+router.delete('/favorite/remove/:_id', recipesController.removeFavorite)
+router.get('/favorite', recipesController.getAllUserFavorites)
 
 module.exports = router

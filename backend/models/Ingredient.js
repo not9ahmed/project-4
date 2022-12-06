@@ -6,7 +6,8 @@ Schema = mongoose.Schema;
 const IngredientModel = new Schema({
     name_en: {type: String, required: true},
     name_ar: {type: String, required: true},
-    quantity: {type: String, required: true},
+    quantity_en: {type: String, required: true},
+    quantity_ar: {type: String, required: true},
 }, {
     timestamps: true
 })

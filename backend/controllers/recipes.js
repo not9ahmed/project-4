@@ -75,12 +75,13 @@ const getAllRecipes = async (req, res) => {
 
 const getRecipeById = async (req,res) => {
     try{
-        const recipe = await Recipe.findById(req.params.id).populate(['ingredients', 'users_favorited'])
+        const recipe = await Recipe.findById(req.params._id).populate(['ingredients', 'users_favorited'])
         return res.json(recipe)
     } catch(err){
         return res.json(err)
     }
 }
+
 const updateRecipe = async (req, res) => {
     try {
 
@@ -118,13 +119,14 @@ const createIngredient = async (req, res) => {
         let newIngredient = await Ingredient.create({
             name_en: req.body.name_en,
             name_ar: req.body.name_ar,
-            quantity: req.body.quantity
+            quantity_en: req.body.quantity_en,
+            quantity_ar: req.body.quantity_ar
         })
 
-        res.json(newIngredient)
+        return res.json({message: 'Ingredient Created Successfully'})
     
     }catch (err){
-        res.json(err)
+        return res.json(err)
     }
 }
 
@@ -144,7 +146,7 @@ const getAllIngredients = async (req, res) => {
 const getIngredientById = async (req, res) => {
 
     try {
-        const ingredient = await Ingredient.findById(req.params.id);
+        const ingredient = await Ingredient.findById(req.params._id);
         return res.json(ingredient);
     } catch(err){
         return res.json(err)
@@ -184,7 +186,7 @@ const deleteIngredient = async (req, res) => {
 
 
 
-const favoriteRecipe = async (req, res) => {
+const addFavorite = async (req, res) => {
 
     const user = jwt_decode(req.headers.authorization)
 
@@ -192,19 +194,20 @@ const favoriteRecipe = async (req, res) => {
 
     try {
 
-        // get the user
-        let userDb = await User.findById(mongoose.Types.ObjectId(idOfUser))
 
-        // get thecrecipe
-        let recipe = await Recipe.findById(
-            req.params._id,
+        const userDb = await User.findByIdAndUpdate(
+            idOfUser,
+            { $push: { favorited_recipes: mongoose.Types.ObjectId(req.params._id) } },
+            { new: true }
         )
 
-        recipe.users_favorited.push(userDb._id)
-        await recipe.save()
+        
+        const recipe = await Recipe.findByIdAndUpdate(
+            req.params._id,
+            { $push: { users_favorited: mongoose.Types.ObjectId(idOfUser) } },
+            { new: true }
+        )
 
-        userDb.favorited_recipes.push(recipe._id)
-        await userDb.save()
 
         return res.json({message: 'Recipe Got Favorited Successfully'})
 
@@ -214,50 +217,49 @@ const favoriteRecipe = async (req, res) => {
 }
 
 
-const removeFavoriteRecipe = async (req, res) => {
+const removeFavorite = async (req, res) => {
 
     const user = jwt_decode(req.headers.authorization)
-
     const idOfUser = user.user.id
 
     try {
 
-        // get the user
-        // let userDb = await User.findById(mongoose.Types.ObjectId(idOfUser))
-
-        // get the recipe
-        // let recipe = await Recipe.findById(
-        //     req.params._id,
-        // )
-
         const userDb = await User.findByIdAndUpdate(
-            ObjectId(userDb._id),
-            { $pull: { favorited_recipes: ObjectId(req.params._id) } },
+            idOfUser,
+            { $pull: { favorited_recipes: mongoose.Types.ObjectId(req.params._id) } },
             { new: true }
         )
 
         
         const recipe = await Recipe.findByIdAndUpdate(
-                req.params._id,
-                { $pull: { users_favorited: ObjectId(userDb._id) } },
-                { new: true }
-            )
+            req.params._id,
+            { $pull: { users_favorited: mongoose.Types.ObjectId(idOfUser) } },
+            { new: true }
+        )
             
-            
-            
-            
-        // recipe.users_favorited.push(userDb._id)
-        // await recipe.save()
-
-        // userDb.favorited_recipes.push(recipe._id)
-        // await userDb.save()
-
         return res.json({message: 'Recipe Got Unfavorited Successfully'})
 
     } catch (err) {
         return res.json(err)
     }
 }
+
+const getAllUserFavorites = async (req, res) => {
+
+    const user = jwt_decode(req.headers.authorization)
+    const idOfUser = user.user.id
+
+    try {
+
+        const userRecipes = await User.findById(idOfUser).populate('favorited_recipes')
+
+        return res.json(userRecipes.favorited_recipes)
+
+    } catch (err) {
+        return res.json(err)
+    }
+}
+
 
 
 module.exports = {
@@ -271,6 +273,7 @@ module.exports = {
     getIngredientById,
     updateIngredient,
     deleteIngredient,
-    favoriteRecipe,
-    removeFavoriteRecipe
+    addFavorite,
+    removeFavorite,
+    getAllUserFavorites
 }
