@@ -1,11 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
-import HomePage from './HomePage/HomePage'
-import About from './About/About';
-import Login from './User/Login';
-import Signup from './User/Signup';
-import Navbar from './Navbar/Navbar';
-import Foods from './Foods/Foods';
+import HomePage from './components/HomePage/HomePage'
+import About from './components/About/About';
+import Login from './components/User/Login';
+import Signup from './components/User/Signup';
+import Navbar from './components/Navbar/Navbar';
+import AllRecipes from './components/AllRecipes/AllRecipes';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom' 
 import axios from 'axios';
@@ -81,7 +81,7 @@ function App() {
           <Route path='/home' element={isAuth ? <HomePage /> : <Login login={loginHandler}></Login>} />
           <Route path='*' element={<HomePage />} />
           <Route path='/about' element={<About />} />
-          <Route path='/Foods' element={<Foods />} />
+          <Route path='/Foods' element={<AllRecipes />} />
 
           <Route path="/signup" element={<Signup register={registerHandler}></Signup>}></Route>
           <Route path="/login" element={<Login login={loginHandler}></Login>}></Route>

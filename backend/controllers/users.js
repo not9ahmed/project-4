@@ -83,47 +83,55 @@ const getAllUsers = async (req, res) => {
 
 
 const getUserById = async (req, res) => {
+
+
+    const idOfUser = req.params._id
     
     try {
-        const user = await User.findById(req.params.userId)
+        const user = await User.findById(idOfUser)
         return res.json(user)
+
     }catch (err){
         return res.json(err);
     }
 }
 
 const updateUser = async (req, res) => {
+
+    const idOfUser = req.params._id
     
     try {
-        const filter = {_id: req.params.userId};
-        const update = req.body;
-        const updatedUser = await User.findOneAndUpdate(filter, update);
-        res.json(updatedUser);
+
+        const updatedData = req.body
+        const updatedUser = await User.findByIdAndUpdate(idOfUser, updatedData)
+
+        return res.json(updatedUser)
+
     }catch (err){
-        res.json(err);
+        return res.json(err)
     }
 }
 
 
 
-const getUsersRecipes = async (req, res) => {
+// const getUsersRecipes = async (req, res) => {
 
 
-    const user = jwt_decode(req.headers.authorization)
-    console.log(user)
+//     const user = jwt_decode(req.headers.authorization)
+//     console.log(user)
 
-    const idOfUser = user.user.id
+//     const idOfUser = user.user.id
 
-    try {
+//     try {
 
-       const user = await User.findById(mongoose.Types.ObjectId(idOfUser)).populate('recipes')
+//        const user = await User.findById(mongoose.Types.ObjectId(idOfUser)).populate('recipes')
        
-       return res.json(user)
+//        return res.json(user.favorited_recipes)
 
-    }catch (err){
-        return res.json(err);
-    }
-}
+//     }catch (err){
+//         return res.json(err);
+//     }
+// }
 
 
 
@@ -134,6 +142,6 @@ module.exports = {
     loginUser,
     getAllUsers,
     getUserById,
-    updateUser,
-    getUsersRecipes
+    updateUser
+    // getUsersRecipes
 }
