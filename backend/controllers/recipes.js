@@ -73,14 +73,19 @@ const getAllRecipes = async (req, res) => {
 }
 
 
-const getRecipeById = async (req,res) => {
-    try{
-        const recipe = await Recipe.findById(req.params._id).populate(['ingredients', 'users_favorited'])
+const getRecipeById = async (req, res) => {
+    
+    try {
+        // const recipe = await Recipe.findById(req.params._id).populate(['ingredients', 'users_favorited'])
+        const recipe = await Recipe.findById(mongoose.Types.ObjectId(req.params._id)).populate(['ingredients', 'users_favorited'])
+
+        console.log(recipe)
         return res.json(recipe)
     } catch(err){
         return res.json(err)
     }
 }
+
 
 const updateRecipe = async (req, res) => {
     try {

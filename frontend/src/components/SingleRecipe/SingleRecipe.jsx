@@ -6,17 +6,15 @@ import { useNavigate } from 'react-router-dom'
 function SingleRecipe(props) {
 
     const recipe = props.recipe
-
-
-    const recipeId = recipe._id
+    const id = recipe._id
 
 
     const navigate = new useNavigate();
 
   
     const handleRecipeClick = (e) => {
-        console.log('food id', recipeId)
-        navigate(`/food/${recipeId}/details`);
+        console.log('recipe id', id)
+        navigate(`/recipes/${id}/details`);
     }
 
 

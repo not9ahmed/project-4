@@ -2,8 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import HomePage from './components/HomePage/HomePage'
 import About from './components/About/About';
-import Login from './components/User/Login';
-import Signup from './components/User/Signup';
+import Login from './components/Login/Login';
+import Signup from './components/Signup/Signup';
 import Navbar from './components/Navbar/Navbar';
 import AllRecipes from './components/AllRecipes/AllRecipes';
 
@@ -11,6 +11,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import jwt_decode from 'jwt-decode';
+import RecipeDetails from './components/RecipeDetails/RecipeDetails';
 
 
 function App() {
@@ -81,10 +82,13 @@ function App() {
           <Route path='/home' element={isAuth ? <HomePage /> : <Login login={loginHandler}></Login>} />
           <Route path='*' element={<HomePage />} />
           <Route path='/about' element={<About />} />
-          <Route path='/Foods' element={<AllRecipes />} />
+          <Route path='/recipes' element={<AllRecipes />} />
 
           <Route path="/signup" element={<Signup register={registerHandler}></Signup>}></Route>
           <Route path="/login" element={<Login login={loginHandler}></Login>}></Route>
+
+
+          <Route path="/recipes/:id/details" element={<RecipeDetails/>} />
         </Routes>
       </div>
     </div>
