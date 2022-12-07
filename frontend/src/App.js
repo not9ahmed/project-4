@@ -12,6 +12,8 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import jwt_decode from 'jwt-decode';
 import RecipeDetails from './components/RecipeDetails/RecipeDetails';
+import PredictRecipe from './components/PredictRecipe/PredictRecipe';
+import PredictResult from './components/PredictResult/PredictResult';
 
 
 function App() {
@@ -89,6 +91,9 @@ function App() {
 
 
           <Route path="/recipes/:id/details" element={<RecipeDetails/>} />
+
+          <Route path="/predict-recipe" element={<PredictRecipe/>} />
+          <Route path="/predict-result" element={<PredictResult/>} />
         </Routes>
       </div>
     </div>

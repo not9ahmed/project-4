@@ -31,7 +31,7 @@ function RecipeDetails(props) {
 
 
         {recipe.images ?
-        <img src={recipe.images[0]} />
+        <img src={recipe.images[0]} alt="Recipe"/>
         : <h1>Still loading..</h1>}
 
 

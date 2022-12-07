@@ -1,10 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const recipesController = require('../controllers/recipes')
-
+const multer = require('multer');
+const upload = multer();
 
 // Recipes
-router.post('/recipe', recipesController.createRecipe)
+router.post('/recipe',upload.none(), recipesController.createRecipe)
 router.get('/recipe', recipesController.getAllRecipes)
 router.get('/recipe/:_id', recipesController.getRecipeById)
 router.put('/recipe/:_id', recipesController.updateRecipe)
@@ -23,5 +24,9 @@ router.delete('/ingredient/:_id', recipesController.deleteIngredient)
 router.post('/favorite/add/:_id', recipesController.addFavorite)
 router.delete('/favorite/remove/:_id', recipesController.removeFavorite)
 router.get('/favorite', recipesController.getAllUserFavorites)
+
+
+// Predict Food
+router.post('/predict-food', recipesController.predictFood) 
 
 module.exports = router

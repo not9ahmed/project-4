@@ -5,6 +5,7 @@ const jwt_decode = require('jwt-decode')
 const User = require('../models/User')
 const Recipe = require('../models/Recipe')
 const Ingredient = require('../models/Ingredient')
+const axios = require('axios')
 
 const createRecipe = async (req, res) => {
     // console.log("this is the create food function!!!")
@@ -265,6 +266,22 @@ const getAllUserFavorites = async (req, res) => {
     }
 }
 
+const predictFood = async (req, res) => {
+
+    try {
+
+
+        console.log(req.body.image)
+
+        // const data = await axios.post('')
+
+        // return res.json(req.body.image)
+        return res.json({"response": "responseData"})
+    
+    }catch(err){
+        return res.json(err)
+    }
+}
 
 
 module.exports = {
@@ -280,5 +297,6 @@ module.exports = {
     deleteIngredient,
     addFavorite,
     removeFavorite,
-    getAllUserFavorites
+    getAllUserFavorites,
+    predictFood
 }
