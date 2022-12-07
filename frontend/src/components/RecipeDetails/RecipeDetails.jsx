@@ -35,11 +35,14 @@ function RecipeDetails(props) {
         : <h1>Still loading..</h1>}
 
 
-        <h1>{recipe.name_en}</h1>
-        <h1>{recipe.name_ar}</h1>
-        <h1>{recipe.description_en}</h1>
-        <h1>{recipe.description_ar}</h1>
+        <h1>Recipe Name in English: {recipe.name_en}</h1>
+        <h1>Recipe Description in English: {recipe.description_en}</h1>
 
+
+        <h1>Recipe Name in Arabic: {recipe.name_ar}</h1>
+        <h1>Recipe Description in Arabic: {recipe.description_ar}</h1>
+
+    
 
     </div>
   )

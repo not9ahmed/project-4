@@ -40,31 +40,7 @@ function AllRecipes() {
                     <SingleRecipe recipe={recipe} />
                     </React.Fragment>
                 )}
-                {recipesList.map( (recipe, index) =>
-                    <React.Fragment key={index}>
-                    <SingleRecipe recipe={recipe} />
-                    </React.Fragment>
-                )}
-                {recipesList.map( (recipe, index) =>
-                    <React.Fragment key={index}>
-                    <SingleRecipe recipe={recipe} />
-                    </React.Fragment>
-                )}
-                {recipesList.map( (recipe, index) =>
-                    <React.Fragment key={index}>
-                    <SingleRecipe recipe={recipe} />
-                    </React.Fragment>
-                )}
-                {recipesList.map( (recipe, index) =>
-                    <React.Fragment key={index}>
-                    <SingleRecipe recipe={recipe} />
-                    </React.Fragment>
-                )}
-                {recipesList.map( (recipe, index) =>
-                    <React.Fragment key={index}>
-                    <SingleRecipe recipe={recipe} />
-                    </React.Fragment>
-                )}
+
             </div>
 
         </div>

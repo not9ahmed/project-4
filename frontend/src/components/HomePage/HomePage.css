@@ -1,8 +1,10 @@
-.Home {
+.home-page {
     background-image: url("https://www.iretron.com/blog/wp-content/uploads/2017/01/robot-waiter.jpg");
     background-repeat: no-repeat;
-    background-size: contain;
+    /* background-size: contain;
     padding-bottom: 100%;
     padding-top: 1px;
     opacity: 0.8;
+    /* width: 100%;
+    height: 100%; */
 }

@@ -1,3 +1,7 @@
+.nav-bar {
+    width: 100%;
+}
+
 .navbar-ul {
     /* border: 2px solid red; */
     display: flex;
@@ -42,7 +46,7 @@ a {
     background-color: rgb(179, 126, 126);
 }
 
-.Nav1{
+/* .Nav1{
     color: rgb(0, 0, 0);
     text-decoration: none;
 }
@@ -74,4 +78,4 @@ a {
 }
 
 
-
+ */

@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import HomePage from './components/HomePage/HomePage'
 import About from './components/About/About';
@@ -76,10 +75,11 @@ function App() {
     }
   return (
   <Router>
-    <div className="App">
+
     
-    <Navbar onLogoutHandler={onLogoutHandler} isAuth={isAuth} user={user}/>
       <div className="App">
+      <Navbar onLogoutHandler={onLogoutHandler} isAuth={isAuth} user={user}></Navbar>
+
         <Routes>
           <Route path='/home' element={isAuth ? <HomePage /> : <Login login={loginHandler}></Login>} />
           <Route path='*' element={<HomePage />} />
@@ -96,7 +96,7 @@ function App() {
           <Route path="/predict-result" element={<PredictResult/>} />
         </Routes>
       </div>
-    </div>
+
   </Router>
   );
 }

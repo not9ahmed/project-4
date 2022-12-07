@@ -1,6 +1,9 @@
 .prediction-result-page {
     background-color: rgb(189, 232, 232);
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
 }
 
+.predict-recipe-image {
+    width: 500px;
+}

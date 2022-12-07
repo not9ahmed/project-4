@@ -73,14 +73,14 @@ function PredictRecipe(props) {
         formData.append('image', image)
 
         axios.post('http://localhost:4000/predict-food', formData)
-        .then(res => {
-            console.log(res.data)
+        .then((res) => {
+            // runs before api call
 
-            const data = res.data
+            console.log(res.data)
 
             navigate('/predict-result', {
                 state: {
-                    data: data
+                    data: res.data
                 }
             })
 
@@ -88,7 +88,6 @@ function PredictRecipe(props) {
         .catch(err => console.log(err))
 
 
-        // navigate('/predict-result')
 
         // send to backend
         // function to handle submission or send the image state to backend

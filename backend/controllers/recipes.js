@@ -23,12 +23,14 @@ const createRecipe = async (req, res) => {
 
         let ingredients = req.body.ingredients
 
+        console.log(ingredients)
+
         // images = []
         if (recipeImages === undefined){
             recipeImages = []
         } else {
             recipeImages.forEach(element => {
-                element = mongoose.Types.ObjectId(element)
+                element = element
             });
         }
 
@@ -91,9 +93,43 @@ const getRecipeById = async (req, res) => {
 const updateRecipe = async (req, res) => {
     try {
 
+
+        console.log(req.body)
+
+
+        let recipeImages = req.body.images
+
+        let ingredients = req.body.ingredients
+
+
+        console.log("recipeImages", recipeImages)
+
+        console.log("ingredients", ingredients)
+
+        // images = []
+        if (recipeImages){
+            recipeImages.forEach(element => {
+                element = element
+            });
+        }
+
+        if (ingredients){
+            ingredients.forEach(element => {
+                element = mongoose.Types.ObjectId(element)
+            });
+        }
+
+
         let updatedRecipe = await Recipe.findByIdAndUpdate(
             req.params._id,
-            req.body
+            {
+                name_en: req.body.name_en,
+                name_ar: req.body.name_ar,
+                description_en: req.body.description_en,
+                description_ar: req.body.description_ar,
+                images: recipeImages,
+                ingredients: ingredients
+            }
         )
 
         console.log(updatedRecipe)
@@ -128,6 +164,8 @@ const createIngredient = async (req, res) => {
             quantity_en: req.body.quantity_en,
             quantity_ar: req.body.quantity_ar
         })
+
+        console.log(newIngredient)
 
         return res.json({message: 'Ingredient Created Successfully'})
     
@@ -273,10 +311,26 @@ const predictFood = async (req, res) => {
 
         console.log(req.body.image)
 
+
+        // API CALL to FastAPI ML Model
         // const data = await axios.post('')
 
+
+        const recipePrediction = 'Machboos'
+        // get the name then request from the db for the full recipe data
+
+
+
+        const recipe = await Recipe.findOne({name_en: recipePrediction}).populate(['ingredients', 'users_favorited'])
+
+        // send the db recipe data to the frontend
+
         // return res.json(req.body.image)
-        return res.json({"response": "responseData"})
+
+        console.log(recipe)
+
+        return res.json(recipe)
+        // return res.json({"response": "responseData"})
     
     }catch(err){
         return res.json(err)
