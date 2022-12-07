@@ -311,26 +311,76 @@ const predictFood = async (req, res) => {
 
         console.log(req.body.image)
 
+        const image = req.body.image
 
         // API CALL to FastAPI ML Model
-        // const data = await axios.post('')
+        // Add the image from the react reponse and send it to fastAPI
+
+        const formData = new FormData()
+
+        formData.append('image', image)
+
+        axios.post('http://localhost:8000/predict', formData)
+        .then((res) => {
+            // runs before api call
+
+            // should return the recipe class
+            console.log(res.data)
 
 
-        const recipePrediction = 'Machboos'
-        // get the name then request from the db for the full recipe data
+            const recipePrediction = 'Machboos'
+            
+            
+            // get the name then request from the db for the full recipe data
+            Recipe.findOne({name_en: recipePrediction}).populate(['ingredients', 'users_favorited'])
+            .then(res => {
+
+                // database response
+                recipe = res
+
+                console.log(recipe)
+
+                return res.json(recipe)
+            })
+            .catch(err => {
+                console.log(err)
+                return res.json(err)
+            })
+
+        // const recipe = await Recipe.findOne({name_en: recipePrediction}).populate(['ingredients', 'users_favorited'])
+
+        // // send the db recipe data to the frontend
+
+        // // return res.json(req.body.image)
+
+        // console.log(recipe)
+
+        // return res.json(recipe)
+
+
+        })
+        .catch(err => {
+            console.log(err)
+
+            return res.json(err)
+        })
+
+
+        // const recipePrediction = 'Machboos'
+        // // get the name then request from the db for the full recipe data
 
 
 
-        const recipe = await Recipe.findOne({name_en: recipePrediction}).populate(['ingredients', 'users_favorited'])
+        // const recipe = await Recipe.findOne({name_en: recipePrediction}).populate(['ingredients', 'users_favorited'])
 
-        // send the db recipe data to the frontend
+        // // send the db recipe data to the frontend
 
-        // return res.json(req.body.image)
+        // // return res.json(req.body.image)
 
-        console.log(recipe)
+        // console.log(recipe)
 
-        return res.json(recipe)
-        // return res.json({"response": "responseData"})
+        // return res.json(recipe)
+        // // return res.json({"response": "responseData"})
     
     }catch(err){
         return res.json(err)
